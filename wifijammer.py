@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR) # Shut up Scapy
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR) # This Bitch Better Shut Up
 from scapy.all import *
 conf.verb = 0 # Scapy I thought I told you to shut up
 import os
@@ -50,7 +50,7 @@ def parse_args():
 
 def get_mon_iface(args):
     global monitor_on
-    monitors, interfaces = iwconfig()
+    monitors, interfaces = ifconfig() #changed to ifconfig/OSX
     if args.interface:
         monitor_on = True
         return args.interface
@@ -64,13 +64,13 @@ def get_mon_iface(args):
         monmode = start_mon_mode(interface)
         return monmode
 
-def iwconfig():
+def ifconfig():   #changed to ifconfig
     monitors = []
     interfaces = {}
     try:
-        proc = Popen(['iwconfig'], stdout=PIPE, stderr=DN)
+        proc = Popen(['ifconfig'], stdout=PIPE, stderr=DN)
     except OSError:
-        sys.exit('['+R+'-'+W+'] Could not execute "iwconfig"')
+        sys.exit('['+R+'-'+W+'] Could not execute "ifconfig"')
     for line in proc.communicate()[0].split('\n'):
         if len(line) == 0: continue # Isn't an empty string
         if line[0] != ' ': # Doesn't start with space
